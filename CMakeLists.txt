@@ -10,5 +10,5 @@ find_package(Boost)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 add_executable(solve
-    src/level4.cpp
+    src/level5.cpp
 )
