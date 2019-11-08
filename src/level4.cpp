@@ -6,6 +6,8 @@
 #include <cmath>
 #include <sstream>
 
+// #define DEBUG
+
 struct Cell {
     long long height = -1;
     int country = -1;
@@ -42,7 +44,7 @@ bool IsTouched(int ox, int oy, int dx, int dy, int x, int y) {
     double min_y = y - 0.5;
     double max_y = y + 0.5;
 
-    double eps = -1.0e-8;
+    double eps = -1.0e-9;
     if (y1 - eps < min_y && y2 - eps < min_y) {
         return false;
     }
@@ -57,10 +59,15 @@ int main() {
     int queries;
     std::cin >> rows >> cols >> queries;
 
+#ifdef DEBUG
+    std::cout << LOG(rows) << LOG(cols) << std::endl;
+#endif
     for (int q = 0; q < queries; ++q) {
         int ox, oy, dx, dy;
         std::cin >> ox >> oy >> dx >> dy;
+#ifdef DEBUG
         std::cout  << "------ "<< ox << " " << oy << " " << dx << " " << dy << std::endl;
+#endif
 
         std::vector<Point> points;
 
@@ -94,8 +101,8 @@ int main() {
         } else if (dominant_x) {
             int y_dir = dy / abs(dy);
             int x_dir = dx / abs(dx);
-            for (int y = oy; y_dir > 0 ? y < cols : y >= 0; y += y_dir) {
-                for (int x = ox; x_dir > 0 ? x < rows : x >= 0; x += x_dir) {
+            for (int y = oy; y_dir > 0 ? y < rows : y >= 0; y += y_dir) {
+                for (int x = ox; x_dir > 0 ? x < cols : x >= 0; x += x_dir) {
                     if (IsTouched(ox, oy, dx, dy, x, y)) {
                         addPoint({x, y});
                     }
@@ -104,8 +111,8 @@ int main() {
         } else {
             int y_dir = dy / abs(dy);
             int x_dir = dx / abs(dx);
-            for (int x = ox; x_dir > 0 ? x < rows : x >= 0; x += x_dir) {
-                for (int y = oy; y_dir > 0 ? y < cols : y >= 0; y += y_dir) {
+            for (int x = ox; x_dir > 0 ? x < cols : x >= 0; x += x_dir) {
+                for (int y = oy; y_dir > 0 ? y < rows : y >= 0; y += y_dir) {
                     if (IsTouched(ox, oy, dx, dy, x, y)) {
                         addPoint({x, y});
                     }
@@ -113,6 +120,7 @@ int main() {
             }
         }
 
+#ifdef DEBUG
         std::stringstream ss;
         for (int r = 0; r < rows; ++r) {
             for (int c = 0; c < cols; ++c) {
@@ -126,6 +134,7 @@ int main() {
             ss << "|" << std::endl;
         }
         std::cout << ss.str();
+#endif
 
         for (auto& p : points) {
             std::cout << p.x << " " << p.y << " ";
